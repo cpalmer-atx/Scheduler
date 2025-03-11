@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= shopId %> - Scheduler</title>
+  <meta name="description" content="Book appointments with <%= shopId %>">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="p-4">
+  <h1 class="text-2xl mb-4">Appointments for <%= shopId %></h1>
+
+  <!-- Create -->
+  <form action="/add" method="POST" class="mb-4">
+    <input type="text" name="client_name" class="border p-2 mr-2" placeholder="Client Name" required>
+    <input type="datetime-local" name="time" class="border p-2 mr-2" required>
+    <button type="submit" class="bg-blue-500 text-white p-2">Add</button>
+  </form>
+
+  <!-- Read -->
+  <ul class="space-y-2">
+    <% appointments.forEach(appointment => { %>
+      <li class="flex items-center">
+        <span class="<%= appointment.status === 'done' ? 'line-through' : '' %>">
+          <%= appointment.client_name %> - <%= appointment.time %>
+        </span>
+        <% if (appointment.status === 'pending') { %>
+          <form action="/update/<%= appointment.id %>" method="POST" class="ml-2">
+            <button class="bg-green-500 text-white p-1">Done</button>
+          </form>
+        <% } %>
+        <form action="/delete/<%= appointment.id %>" method="POST" class="ml-2">
+          <button class="bg-red-500 text-white p-1">Delete</button>
+        </form>
+      </li>
+    <% }) %>
+  </ul>
+</body>
+</html>
